@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -47,7 +47,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Register() {
+  const [inputs, setInputs] = useState({});
+
   const classes = useStyles();
+
+  const handleInputChange = (event) => {
+    event.persist();
+    setInputs((inputs) => ({
+      ...inputs,
+      [event.target.name]: event.target.value,
+    }));
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(`Hi ${inputs.firstName}`);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,12 +73,14 @@ export default function Register() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
                 name="firstName"
+                value={inputs.firstName}
+                onChange={handleInputChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -82,6 +98,8 @@ export default function Register() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                value={inputs.LastName}
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -93,6 +111,8 @@ export default function Register() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={inputs.email}
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -105,12 +125,16 @@ export default function Register() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={inputs.password}
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
+                value="Add to mailing list"
+                onChange={handleInputChange}
               />
             </Grid>
           </Grid>
@@ -125,7 +149,7 @@ export default function Register() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="#/sign-in" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
