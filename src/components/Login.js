@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -47,7 +47,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
+  const [inputs, setInputs] = useState({});
   const classes = useStyles();
+
+  const handleInputChange = (event) => {
+    event.persist();
+    setInputs((inputs) => ({
+      ...inputs,
+      [event.target.name]: event.target.value,
+    }));
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(`Welcome back ${inputs.email}`);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,7 +72,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -70,6 +83,8 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={inputs.email}
+            onChange={handleInputChange}
           />
           <TextField
             variant="outlined"
@@ -81,6 +96,8 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={inputs.password}
+            onChange={handleInputChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -92,6 +109,8 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            value="Yes"
+            onChange={handleInputChange}
           >
             Sign In
           </Button>
