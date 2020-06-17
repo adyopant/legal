@@ -1,68 +1,113 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# Legal
 
-## Available Scripts
+## User Stories
 
-In the project directory, you can run:
+### MVP
 
-### `yarn start`
+As a user:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- I want to register for the App under my name, and state my hourly wage
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Stretch
 
-### `yarn test`
+- I want to be able to select existing users of the App as meeting attendees, so that our wages don't have to be shown / inputted manually. If a meeting attendee doesn't have an account, I want to be able to manually add them to the App.
+- I want to set a Maximum Cost an Maximum Duration for my Meeting, and see colourised progress bar displaying both a these
+- I want to be able to state my yearly salary rather than hourly rate as an option on register
+- I want to be able to view all meetings that I am an attenee for, and I want information about my meetings to not be visible to all users of the app.
+- I want to create a group of regular attendees for my meeting group to make setting up my meeting easier.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `yarn build`
+## Views (Client Side)
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| name          | purpose                                                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Login         | View for user to enter their login credentials                                                                           |
+| Register      | View for user to sign up for the App                                                                                     |
+| CreateMeeting | View for user to arrange meeting attendees and information before starting the timer                                     |
+| Meeting       | View to display current meeting time, cost and other information while the meeting is in progress                        |
+| History       | Display a list of past meetings the user has attended with select preview information                                    |
+| PastMeeting   | Display a single meeting from the history list, displaying more information and a list of attendees for the past meeting |
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Reducers (Client Side)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| name           | purpose                                                              |
+| -------------- | -------------------------------------------------------------------- |
+| auth           | Store information regarding user logins, auth status and auth errors |
+| currentMeeting | Track meeting progress such as current cost and current duration     |
+| meetings       | store the list of meetings the user has attended in the past         |
+| users          | store the list of users who can attend meetings                      |
 
-### `yarn eject`
+## Actions
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### meetings
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| type             | data     | purpose                                                 |
+| ---------------- | -------- | ------------------------------------------------------- |
+| RECEIVE_MEETINGS | meetings | retreive meetings from the db and store in redux        |
+| ADD_MEETING      | meeting  | Add a single meeting to the history after it is created |
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### users
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+| type          | data  | purpose                            |
+| ------------- | ----- | ---------------------------------- |
+| RECEIVE_USERS | users | retreive the users from the server |
 
-## Learn More
+### currentMeeting
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| type            | data                         | purpose                                          |
+| --------------- | ---------------------------- | ------------------------------------------------ |
+| START_MEETING   | attendees ([]), meeting_name | a meeting has started, set initial meeting state |
+| END_MEETING     | null                         | Set meeting in progress flag to false            |
+| TICK_ONE_SECOND | null                         | Increase running total by 1s worth of \$         |
+| RESET_MEETING   | null                         | Revert to initial state                          |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## API (Client - Server)
 
-### Code Splitting
+| Method | Endpoint                | Protected | Usage                          | Response                                          |
+| ------ | ----------------------- | --------- | ------------------------------ | ------------------------------------------------- |
+| Post   | /api/auth/login         | Yes       | Log In a User                  | The Users JWT Token                               |
+| Post   | /api/auth/register      | Yes       | Register a User                | The Users JWT Token                               |
+| Get    | /api/meetings           | Yes       | Get a Users Meeting Histroy    | An Array of Meetings                              |
+| Post   | /api/meetings           | Yes       | Save a completed meeting       | The Meeting that has been saved in db read format |
+| Get    | /api/meetings/:id/users | Yes       | Get the attendees of a Meeting | An Array of User objects                          |
+| Get    | /api/users              | Yes       | Get the users of the app       | An Array of User Objects                          |
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## DB (Server Side)
 
-### Analyzing the Bundle Size
+There should be three tables for MVP
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+### Users
 
-### Making a Progressive Web App
+| Column Name | Data Type |
+| ----------- | --------- |
+| id          | Integer   |
+| user_name   | String    |
+| first_name  | String    |
+| last_name   | String    |
+| hash        | text      |
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+### Meetings
 
-### Advanced Configuration
+| Column Name  | Data Type |
+| ------------ | --------- |
+| id           | Integer   |
+| meeting_name | String    |
+| time         | Timestamp |
+| attendees    | integer   |
+| cost         | Decimal   |
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### Attendees (Join Table M2M)
 
-### Deployment
+Many Users attend Many Meetings
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+| Column Name | Data Type |
+| ----------- | --------- |
+| user_id     | Integer   |
+| meeting_id  | Integer   |
 
-### `yarn build` fails to minify
+---
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### Wireframe
+
+wireframe
