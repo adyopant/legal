@@ -22,7 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -41,6 +41,10 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^4.8.0"
+    "@babel/core": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
+    "babel-jest": "^26.0.1",
+    "cypress": "^4.8.0",
+    "jest": "^26.0.1"
   }
 }

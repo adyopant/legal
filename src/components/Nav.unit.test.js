@@ -6,7 +6,6 @@ import { render } from "@testing-library/react";
         const { getByText } = render(    
             <Nav />   
         );
-        expect(getByText(/Home/i)).toBeInTheDocument();
-        expect(getByText(/SIGN IN/i)).toBeInTheDocument();
+        expect(getByText(/Home/i));
+        
       });
-      
