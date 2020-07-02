@@ -16,17 +16,26 @@ import { useStyles } from "./RegisterStyles";
 
 // Additional Components
 import Copyright from "./Copyright";
+import ErrorMessage from "./ErrorMessage";
 
 // Utils
 import useErrorHandler from "../utils/custom-hooks/ErrorHandler";
 import { apiRequest, validateLoginForm } from "../utils/Helpers";
 
 export default function SignIn() {
-  const [inputs, setInputs] = useState({});
-  const [loading, setLoading] = React.useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { error, showError } = useErrorHandler(null);
 
   const classes = useStyles();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateLoginForm(userEmail, userPassword, showError)) {
+      authHandler();
+    }
+  };
 
   const authHandler = async () => {
     try {
@@ -34,28 +43,12 @@ export default function SignIn() {
       const userData = await apiRequest(
         "https://jsonplaceholder.typicode.com/users",
         "post",
-        { email: inputs.email, password: inputs.password }
+        { email: userEmail, password: userPassword }
       );
       const { id, email } = userData;
     } catch (err) {
       setLoading(false);
       showError(err.message);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    e.persist();
-    setInputs((inputs) => ({
-      ...inputs,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    // Use event.persist to access the event properties in an asynchronous way
-    e.preventDefault();
-    if (validateLoginForm(inputs.email, inputs.password, showError)) {
-      authHandler();
     }
   };
 
@@ -82,20 +75,19 @@ export default function SignIn() {
             label="Email Address | Username | Mobile"
             name="username"
             autoFocus
-            value={inputs.email}
-            onChange={handleInputChange}
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
             id="password"
-            value={inputs.password}
-            onChange={handleInputChange}
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}
           />
           <Button
             type="submit"
@@ -103,11 +95,13 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            value="Yes"
-            onChange={handleInputChange}
+            disabled={loading}
+            block="true"
           >
-            Sign In
+            {loading ? "Loading..." : "Sign In"}
           </Button>
+          <br />
+          {error && <ErrorMessage errorMessage={error} />}
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
