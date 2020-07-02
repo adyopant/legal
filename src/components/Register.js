@@ -1,50 +1,21 @@
 import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+// MUI Styles
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import { useStyles } from "./RegisterStyles";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="/">
-        Your Website
-      </Link>
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+// Additional Components
+import Copyright from "./Copyright";
 
 export default function Register() {
   const [inputs, setInputs] = useState({});
@@ -52,19 +23,22 @@ export default function Register() {
   const classes = useStyles();
 
   const handleInputChange = (event) => {
+    // Use event.persist to access the event properties in an asynchronous way
     event.persist();
     setInputs((inputs) => ({
       ...inputs,
       [event.target.name]: event.target.value,
     }));
   };
+
+  // TODO: handle the data correctly
   const handleSubmit = (event) => {
     event.preventDefault();
     alert(`Hi ${inputs.firstName}`);
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -75,9 +49,8 @@ export default function Register() {
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <TextField
-                autoComplete="fname"
                 name="firstName"
                 value={inputs.firstName}
                 onChange={handleInputChange}
@@ -89,7 +62,18 @@ export default function Register() {
                 autoFocus
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                id="middleName"
+                label="Middle Name"
+                name="middleName"
+                value={inputs.middleName}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
               <TextField
                 variant="outlined"
                 required
@@ -97,8 +81,19 @@ export default function Register() {
                 id="lastName"
                 label="Last Name"
                 name="lastName"
-                autoComplete="lname"
                 value={inputs.LastName}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="date"
+                label="Date of Birth"
+                type="date"
+                defaultValue="2020-01-01"
+                value={inputs.birthDate}
                 onChange={handleInputChange}
               />
             </Grid>
@@ -126,14 +121,6 @@ export default function Register() {
                 id="password"
                 autoComplete="current-password"
                 value={inputs.password}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-                value="Add to mailing list"
                 onChange={handleInputChange}
               />
             </Grid>
