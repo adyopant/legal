@@ -1,4 +1,4 @@
-# Legal
+# Legal Aid Clinic
 
 ## User Stories
 

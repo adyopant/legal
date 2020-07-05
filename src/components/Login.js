@@ -22,7 +22,7 @@ import ErrorMessage from "./ErrorMessage";
 import useErrorHandler from "../utils/custom-hooks/ErrorHandler";
 import { apiRequest, validateLoginForm } from "../utils/Helpers";
 
-export default function SignIn() {
+const SignIn = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -121,4 +121,5 @@ export default function SignIn() {
       </Box>
     </Container>
   );
-}
+};
+export default SignIn;
