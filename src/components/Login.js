@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 // MUI Styles
 import {
   Avatar,
@@ -14,42 +14,42 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useStyles } from "./RegisterStyles";
 
+// xstate - core finite state machine
+import { Machine } from "xstate";
+import { useMachine } from "@xstate/react";
+import machineConfig from "../utils/machineConfig";
+import initMachineOptions from "../utils/initMachineOptions";
+
 // Additional Components
 import Copyright from "./Copyright";
 import ErrorMessage from "./ErrorMessage";
 
 // Utils
-import useErrorHandler from "../utils/custom-hooks/ErrorHandler";
-import { apiRequest, validateLoginForm } from "../utils/Helpers";
 
 const SignIn = () => {
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { error, showError } = useErrorHandler(null);
+  const machineOptions = initMachineOptions();
+  const signInMachine = Machine(machineConfig, machineOptions);
+  const [current, send] = useMachine(signInMachine);
 
   const classes = useStyles();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateLoginForm(userEmail, userPassword, showError)) {
-      authHandler();
-    }
+  const handleEmailChange = (e) => {
+    send({
+      type: "INPUT_EMAIL",
+      email: e.target.value,
+    });
   };
 
-  const authHandler = async () => {
-    try {
-      setLoading(true);
-      const userData = await apiRequest(
-        "https://jsonplaceholder.typicode.com/users",
-        "post",
-        { email: userEmail, password: userPassword }
-      );
-      const { id, email } = userData;
-    } catch (err) {
-      setLoading(false);
-      showError(err.message);
-    }
+  const handlePasswordChange = (e) => {
+    send({
+      type: "INPUT_PASSWORD",
+      password: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    send({ type: "SUBMIT" });
   };
 
   return (
@@ -65,7 +65,7 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -75,9 +75,21 @@ const SignIn = () => {
             label="Email Address | Username | Mobile"
             name="username"
             autoFocus
-            value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}
+            value={current.context.email}
+            onChange={handleEmailChange}
           />
+          {current.matches("ready.email.error") ? (
+            <ErrorMessage>
+              {current.matches("ready.email.error.empty") &&
+                "please enter your email"}
+              {current.matches("ready.email.error.badFormat") &&
+                "email format doesn't look right"}
+              {current.matches("ready.email.error.noAccount") &&
+                "no account linked with this email"}
+            </ErrorMessage>
+          ) : (
+            <div />
+          )}
           <TextField
             variant="outlined"
             margin="normal"
@@ -86,22 +98,32 @@ const SignIn = () => {
             label="Password"
             type="password"
             id="password"
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}
+            value={current.context.password}
+            disabled={current.matches("waitingResponse")}
+            onChange={handlePasswordChange}
           />
+          {current.matches("ready.password.error") ? (
+            <ErrorMessage>
+              {current.matches("ready.password.error.empty") &&
+                "please enter your password"}
+              {current.matches("ready.password.error.tooShort") &&
+                "password should be at least 5 characters"}
+              {current.matches("ready.password.error.incorrect") &&
+                "incorrect password"}
+            </ErrorMessage>
+          ) : (
+            <div />
+          )}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}
-            block="true"
+            isLoading={current.matches("waitingResponse")}
           >
-            {loading ? "Loading..." : "Sign In"}
+            Sign In
           </Button>
-          <br />
-          {error && <ErrorMessage errorMessage={error} />}
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
