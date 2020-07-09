@@ -1,8 +1,10 @@
 # Legal Aid Clinic
 
 ## Please check the node version on your local machine and ensure you are using - 
+
 ```node --version
-v10.16.3```
+v10.16.3
+```
 
 * Use `npm start` to run app
 
