@@ -2,7 +2,8 @@
 
 ## Please check the node version on your local machine and ensure you are using - 
 
-```node --version
+```
+node --version
 v10.16.3
 ```
 
