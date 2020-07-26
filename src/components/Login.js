@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
 // MUI Styles
 import {
   Avatar,
@@ -15,41 +16,40 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useStyles } from "./RegisterStyles";
 
 // xstate - core finite state machine
-import { Machine } from "xstate";
-import { useMachine } from "@xstate/react";
-import machineConfig from "../utils/machineConfig";
-import initMachineOptions from "../utils/initMachineOptions";
+import { MachineContext } from "../state";
 
 // Additional Components
 import Copyright from "./Copyright";
-import ErrorMessage from "./ErrorMessage";
 
 // Utils
 
 const SignIn = () => {
-  const machineOptions = initMachineOptions();
-  const signInMachine = Machine(machineConfig, machineOptions);
-  const [current, send] = useMachine(signInMachine);
-
+  const [machine, sendToMachine] = useContext(MachineContext);
+  const [form, updateForm] = useState({
+    username: undefined,
+    password: undefined,
+  });
+  const { error } = machine.context;
+  console.log(machine);
   const classes = useStyles();
 
-  const handleEmailChange = (e) => {
-    send({
-      type: "INPUT_EMAIL",
-      email: e.target.value,
+  const handleUserChange = (e) => {
+    updateForm({
+      ...form,
+      username: e.target.value,
     });
   };
 
   const handlePasswordChange = (e) => {
-    send({
-      type: "INPUT_PASSWORD",
+    updateForm({
+      ...form,
       password: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    send({ type: "SUBMIT" });
+    sendToMachine({ type: "LOGIN", data: { ...form } });
   };
 
   return (
@@ -75,44 +75,24 @@ const SignIn = () => {
             label="Email Address | Username | Mobile"
             name="username"
             autoFocus
-            value={current.context.email}
-            onChange={handleEmailChange}
+            value={form.username}
+            onChange={handleUserChange}
           />
-          {current.matches("ready.email.error") ? (
-            <ErrorMessage>
-              {current.matches("ready.email.error.empty") &&
-                "please enter your email"}
-              {current.matches("ready.email.error.badFormat") &&
-                "email format doesn't look right"}
-              {current.matches("ready.email.error.noAccount") &&
-                "no account linked with this email"}
-            </ErrorMessage>
-          ) : (
-            <div />
-          )}
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
             label="Password"
-            type="password"
             id="password"
-            value={current.context.password}
-            disabled={current.matches("waitingResponse")}
+            type="password"
+            value={form.password}
             onChange={handlePasswordChange}
           />
-          {current.matches("ready.password.error") ? (
-            <ErrorMessage>
-              {current.matches("ready.password.error.empty") &&
-                "please enter your password"}
-              {current.matches("ready.password.error.tooShort") &&
-                "password should be at least 5 characters"}
-              {current.matches("ready.password.error.incorrect") &&
-                "incorrect password"}
-            </ErrorMessage>
-          ) : (
-            <div />
+          {machine.matches("auth.fail") && (
+            <div>
+              <p>{error.toString()}</p>
+            </div>
           )}
           <Button
             type="submit"
@@ -120,10 +100,10 @@ const SignIn = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            isLoading={current.matches("waitingResponse")}
           >
             Sign In
           </Button>
+          {machine.matches("auth.success") && <Redirect to="/" />}
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
