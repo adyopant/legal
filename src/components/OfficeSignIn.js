@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
-import { Route } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 // MUI Styles
 import {
+  Avatar,
   Button,
   CssBaseline,
   TextField,
@@ -11,61 +12,88 @@ import {
   Typography,
   Container,
 } from "@material-ui/core";
-import { useStyles } from "./RegisterStyles";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { useStyles } from "./muiStyles";
 
 // xstate - core finite state machine
-// import { MachineContext } from "../state";
+import { MachineContext } from "../state";
 
 // Additional Components
 import Copyright from "./Copyright";
 
 // Utils
 
-const OfficeSignIn = () => {
+const SignIn = () => {
+  const [machine, sendToMachine] = useContext(MachineContext);
+  const [form, updateForm] = useState({
+    username: undefined,
+    password: undefined,
+  });
+  const { error } = machine.context;
+  console.log(machine);
   const classes = useStyles();
 
-  // const Button = () => (
-  //   <Route
-  //     render={() => (
-  //       <Redirect
-  //         to={{
-  //           pathname: "/officer-signin",
-  //         }}
-  //       />
-  //     )}
-  //   />
-  // );
+  const handleUserChange = (e) => {
+    updateForm({
+      ...form,
+      username: e.target.value,
+    });
+  };
+
+  const handlePasswordChange = (e) => {
+    updateForm({
+      ...form,
+      password: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendToMachine({ type: "LOGIN", data: { ...form } });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Welcome Officer Name
+          Welcome to Legal Aid Clinc
         </Typography>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
         <Typography component="h1" variant="h5">
-          Please enter your details
+          Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
             id="username"
-            label="Client ID | Email | Mobile"
+            label="Email Address | Username | Mobile"
             name="username"
             autoFocus
+            value={form.username}
+            onChange={handleUserChange}
           />
-          <p>OR</p>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            label="Case ID"
+            label="Password"
             id="password"
+            type="password"
+            value={form.password}
+            onChange={handlePasswordChange}
           />
+          {machine.matches("auth.fail") && (
+            <div>
+              <p>{error.toString()}</p>
+            </div>
+          )}
           <Button
             type="submit"
             fullWidth
@@ -73,11 +101,19 @@ const OfficeSignIn = () => {
             color="primary"
             className={classes.submit}
           >
-            Search
+            Sign In
           </Button>
+          {machine.matches("auth.success") && <Redirect to="/" />}
           <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
             <Grid item>
-              <Button onChange={Button}>Setup a New Client</Button>
+              <Link href="#/register" variant="body2">
+                {"New to Legal Aid? Sign Up"}
+              </Link>
             </Grid>
           </Grid>
         </form>
@@ -88,4 +124,4 @@ const OfficeSignIn = () => {
     </Container>
   );
 };
-export default OfficeSignIn;
+export default SignIn;

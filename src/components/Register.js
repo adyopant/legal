@@ -12,7 +12,7 @@ import {
   Container,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { useStyles } from "./RegisterStyles";
+import { useStyles } from "./muiStyles";
 
 // Additional Components
 import Copyright from "./Copyright";

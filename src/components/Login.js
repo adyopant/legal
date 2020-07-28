@@ -13,15 +13,13 @@ import {
   Container,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { useStyles } from "./RegisterStyles";
+import { useStyles } from "./muiStyles";
 
 // xstate - core finite state machine
 import { MachineContext } from "../state";
 
 // Additional Components
 import Copyright from "./Copyright";
-
-// Utils
 
 const SignIn = () => {
   const [machine, sendToMachine] = useContext(MachineContext);
@@ -103,7 +101,7 @@ const SignIn = () => {
           >
             Sign In
           </Button>
-          {machine.matches("auth.success") && <Redirect to="/" />}
+          {machine.matches("auth.success") && <Redirect to="/client-profile" />}
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
