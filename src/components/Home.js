@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Box, Container, Grid, Button } from "@material-ui/core";
-import { homeStyles } from "./RegisterStyles";
+import { homeStyles } from "./muiStyles";
 
 import Footer from "./Footer";
 

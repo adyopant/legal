@@ -1,7 +1,7 @@
 import React from "react";
 
 // MUI Style
-import { navStyles } from "./RegisterStyles";
+import { navStyles } from "./muiStyles";
 import { Box, AppBar, Toolbar, Button, IconButton } from "@material-ui/core";
 
 export default function ButtonAppBar() {
