@@ -2,8 +2,8 @@ import { assign } from "xstate";
 
 const signIn = async (context, event) => {
   const { username, password } = event.data;
-  if (username !== "admin" && password !== "admin") {
-    throw new Error("Please check your details and try again");
+  if (username !== "admin@mail.com" && password !== "admin") {
+    throw new Error("Sorry your credentials are incorrect, please try again");
   }
   return { username, password };
 };

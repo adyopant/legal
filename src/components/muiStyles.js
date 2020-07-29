@@ -18,6 +18,9 @@ export const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  error: {
+    color: "#ff004d",
+  },
 }));
 
 export const navStyles = makeStyles((theme) => ({

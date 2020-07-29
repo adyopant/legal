@@ -1,27 +1,28 @@
 import validator from "validator";
 /** Handle form validation for the login form
- * @param email - user's auth email
+ * @param username - user's auth username
  * @param password - user's auth password
  * @param setError - function that handles updating error state value
  */
 export const validateLoginForm = (
-  email: string,
+  username: string,
   password: string,
   setError: (error: string | null) => void
 ): boolean => {
   // Check for undefined or empty input fields
-  if (!email || !password) {
-    setError("Please enter a valid email and password.");
+  if (!username || !password) {
+    setError("Please enter a valid username and password.");
     return false;
   }
-  // Validate email
-  if (!validator.isEmail(email)) {
-    setError("Please enter a valid email address.");
+  // Validate username
+  if (!validator.isEmail(username)) {
+    setError("Please enter a valid username.");
     return false;
   }
   return true;
 };
 
+// NOT IN USE
 /**
  * API Request handler
  * @param url - api endpoint
@@ -31,7 +32,7 @@ export const validateLoginForm = (
 export const apiRequest = async (
   url: string,
   method: string,
-  bodyParams?: { email: string; password: string }
+  bodyParams?: { username: string; password: string }
 ): Promise<any> => {
   const response = await fetch(url, {
     method,

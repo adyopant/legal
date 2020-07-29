@@ -21,17 +21,22 @@ import { MachineContext } from "../state";
 // Additional Components
 import Copyright from "./Copyright";
 
+// Utils
+import useErrorHandler from "../utils/custom-hooks/ErrorHandler";
+import { validateLoginForm } from "../utils/Helpers";
+
 const SignIn = () => {
   const [machine, sendToMachine] = useContext(MachineContext);
   const [form, updateForm] = useState({
     username: undefined,
     password: undefined,
   });
-  const { error } = machine.context;
-  console.log(machine);
+  const [changed, setChanged] = useState(false);
+  const { error, showError } = useErrorHandler(null);
   const classes = useStyles();
 
   const handleUserChange = (e) => {
+    setChanged(true);
     updateForm({
       ...form,
       username: e.target.value,
@@ -39,6 +44,7 @@ const SignIn = () => {
   };
 
   const handlePasswordChange = (e) => {
+    setChanged(true);
     updateForm({
       ...form,
       password: e.target.value,
@@ -46,8 +52,11 @@ const SignIn = () => {
   };
 
   const handleSubmit = (e) => {
+    setChanged(false);
     e.preventDefault();
-    sendToMachine({ type: "LOGIN", data: { ...form } });
+    if (validateLoginForm(form.username, form.password, showError)) {
+      sendToMachine({ type: "LOGIN", data: { ...form } });
+    }
   };
 
   return (
@@ -87,9 +96,9 @@ const SignIn = () => {
             value={form.password}
             onChange={handlePasswordChange}
           />
-          {machine.matches("auth.fail") && (
+          {!changed && error && (
             <div>
-              <p>{error.toString()}</p>
+              <p className={classes.error}>{error.toString()}</p>
             </div>
           )}
           <Button
