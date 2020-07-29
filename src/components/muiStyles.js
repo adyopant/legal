@@ -74,3 +74,13 @@ export const homeStyles = makeStyles((theme) => ({
     marginTop: "4rem",
   },
 }));
+
+export const footerStyles = makeStyles((theme) => ({
+  footer: {
+    backgroundColor: "#f5f5f5",
+    height: "10rem",
+  },
+  text: {
+    paddingTop: "5rem",
+  },
+}));
