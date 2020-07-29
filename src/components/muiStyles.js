@@ -21,6 +21,45 @@ export const useStyles = makeStyles((theme) => ({
   error: {
     color: "#ff004d",
   },
+  grid: {
+    width: "50%",
+    float: "left",
+  },
+}));
+
+export const registerStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(25),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(4),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  error: {
+    color: "#ff004d",
+  },
+  grid: {
+    width: "50%",
+    float: "left",
+    padding: "2rem",
+  },
+  title: {
+    marginTop: "2rem",
+    marginLeft: "8rem;",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
 
 export const navStyles = makeStyles((theme) => ({
