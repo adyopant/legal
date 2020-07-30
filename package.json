@@ -9,8 +9,11 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/lodash": "^4.14.157",
+    "@xstate/react": "^0.8.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
+    "lodash": "^4.17.15",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -20,7 +23,8 @@
     "react-test-renderer": "^16.13.1",
     "typescript": "^3.9.6",
     "uuid": "^8.2.0",
-    "validator": "^13.1.1"
+    "validator": "^13.1.1",
+    "xstate": "^4.11.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -44,6 +48,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1",
     "cypress": "^4.10.0",
     "@types/uuid": "^8.0.0",
     "@types/validator": "^13.1.0"
