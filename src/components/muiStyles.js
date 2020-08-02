@@ -28,6 +28,12 @@ export const useStyles = makeStyles((theme) => ({
 }));
 
 export const registerStyles = makeStyles((theme) => ({
+  input: {
+    display: "none",
+  },
+  addFile: {
+    width: "20px",
+  },
   paper: {
     marginTop: theme.spacing(25),
     display: "flex",
@@ -59,6 +65,16 @@ export const registerStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  typography: {
+    fontSize: ".7rem",
+  },
+  fab: {
+    width: "20rem",
+    display: "flex",
+    alignItems: "left",
+    justifyContent: "left",
+    backgroundColor: "#efe3ea",
   },
 }));
 
