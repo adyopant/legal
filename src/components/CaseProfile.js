@@ -15,6 +15,7 @@ import {
   Checkbox,
   TextareaAutosize,
   Select,
+  makeStyles
 } from "@material-ui/core";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import { registerStyles } from "./muiStyles";
@@ -29,7 +30,18 @@ import Copyright from "./Copyright";
 import useErrorHandler from "../utils/custom-hooks/ErrorHandler";
 import { validateLoginForm } from "../utils/Helpers";
 
-export default function Register() {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'left',
+    color: theme.palette.text.secondary,
+  },
+}));
+
+export default function CaseProfile() {
   const [machine, sendToMachine] = useContext(MachineContext);
   const [form, updateForm] = useState({
     username: undefined,
@@ -59,18 +71,36 @@ export default function Register() {
     <Container component="main" maxWidth="md">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.green}>
-          <AssignmentIcon />
-        </Avatar>
-        <Typography 
-          component="h1"
-          variant="h5"
-          align="left">
-          Case Profile
-        </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={12} className={classes.grid}>
-            <Grid item xs={12}>
+        <Grid container spacing={3}>
+        <Grid item xs={6}>
+              <Avatar className={classes.green} >
+                <AssignmentIcon />
+              </Avatar>
+              </Grid>
+              <Grid item xs={6}>
+              <Typography component="h2" variant="h5" align="left" >Case ID: CI000000001</Typography>
+            </Grid>
+              <Grid item xs={6}>              
+              <Typography component="h2" variant="h4" align="left">
+                Case Profile
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography component="h2" variant="h5" align="left">Client ID: ID000000001</Typography>
+            </Grid>
+            <Grid item xl={4 }>
+            <Typography component="h2" variant="h5" align="left">Next Action: Assign</Typography>
+            </Grid>
+            <Grid item xl={4}>
+            <Typography component="h2" variant="h5" align="left">Action Owner: Ram</Typography>              
+            </Grid>
+            <Grid item xl={4}>
+            <Typography component="h2" variant="h5" align="right">Deadline: 24/10/2020</Typography>
+            </Grid>
+
+            <Grid item xl={12}>
+            
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -80,17 +110,17 @@ export default function Register() {
                 label="Case Title"
                 name="casetitle"
                 autoFocus
-                value={form.casetitle}
-                style={{ width: 800 }}
+                value={form.casetitle} 
+                style={{ width: 750 }}              
                 //onChange={handleCaseTitle}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xl={12}>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={4}
                 placeholder="Enter your Case details Here "
-                style={{ width: 800 }}
+                style={{ width: 750 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -98,7 +128,7 @@ export default function Register() {
                 aria-label="minimum height"
                 rowsMin={4}
                 placeholder="Enter your Notes details Here "
-                style={{ width: 800 }}
+                style={{ width: 750 }}
               />
             </Grid>
             <Grid item sm={4}>
@@ -112,7 +142,7 @@ export default function Register() {
                 Submit
               </Button>
             </Grid>
-          </Grid>
+        </Grid>
         </form>
       </div>
       <Box mt={5}>
