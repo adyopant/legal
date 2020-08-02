@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { Machine } from "xstate";
-import { auth } from "./auth";
+import { auth, signup } from "./auth";
 
 export const MachineContext = createContext();
 
@@ -15,10 +15,14 @@ export const appMachine = Machine({
     init: {},
 
     auth,
+    signup,
   },
   on: {
     LOGIN: {
       target: "auth.started",
+    },
+    SIGNUP: {
+      target: "signup.started",
     },
   },
 });
