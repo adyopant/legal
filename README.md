@@ -8,6 +8,9 @@ v10.16.3
 ```
 
 * Use `npm start` to run app
+* Use `nodemon server.js` to run server (on port 8000 - Express JS)
+
+Remember to run npm install after you git pull, this should stop issues with package-lock.json conflicts
 
 ## User Stories
 
