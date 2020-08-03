@@ -3,6 +3,7 @@ import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 // Components
 import ClientProfile from "./components/ClientProfile";
+import CaseProfile from "./components/CaseProfile";
 import Home from "./components/Home";
 import Nav from "./components/Nav";
 import Login from "./components/Login";
@@ -25,6 +26,7 @@ export default function App() {
             <Route exact path="/" component={Home} />
             <Route path="/sign-in" component={Login} />
             <Route path="/register" component={Register} />
+            <Route path="/case-profile" component={CaseProfile} />
             <PrivateRoute machine={currentMachine}>
               <Route exact path="/client-profile" component={ClientProfile} />
             </PrivateRoute>

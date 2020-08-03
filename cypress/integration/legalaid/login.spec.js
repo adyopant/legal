@@ -8,9 +8,10 @@ context("Actions", () => {
   it("Sign In page loads correctly with all elements", () => {});
 
   it("Valid Sign In", () => {
-    cy.get("input[id=username]").type("test@adyopantlegal.in");
-    cy.get("input[id=password]").type("password");
+    cy.get("input[id=username]").type("admin@mail.com");
+    cy.get("input[id=password]").type("admin");
     cy.get("button").contains("Sign In").click();
+    cy.url().should('include', '/client-profile')    
   });
 
   it("Incorrect password when trying to sign in", () => {
