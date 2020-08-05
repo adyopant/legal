@@ -2,13 +2,14 @@ import React from "react";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 // Components
-import ClientProfile from "./components/ClientProfile";
 import CaseProfile from "./components/CaseProfile";
 import Home from "./components/Home";
 import Nav from "./components/Nav";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import PrivateRoute from "./components/privateroute";
+import PublicRoute from "./components/publicroute";
+import AdminSearch from "./components/AdminSearch";
 
 // State
 import { useMachine } from "@xstate/react";
@@ -21,15 +22,31 @@ export default function App() {
     <MachineContext.Provider value={[currentMachine, sendToMachine]}>
       <Router>
         <div className="App">
-          <Nav />
+          <Nav machine={currentMachine} />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/sign-in" component={Login} />
-            <Route path="/register" component={Register} />
+            {/* User cannot visit route whilst logged in */}
+            <PublicRoute
+              machine={currentMachine}
+              restricted={true}
+              exact
+              path="/sign-in"
+              component={Login}
+            />
+            <PublicRoute
+              machine={currentMachine}
+              restricted={true}
+              exact
+              path="/register"
+              component={Register}
+            />
             <Route path="/case-profile" component={CaseProfile} />
-            <PrivateRoute machine={currentMachine}>
-              <Route exact path="/client-profile" component={ClientProfile} />
-            </PrivateRoute>
+            <PrivateRoute
+              exact
+              path="/admin"
+              component={AdminSearch}
+              machine={currentMachine}
+            />
           </Switch>
         </div>
       </Router>
