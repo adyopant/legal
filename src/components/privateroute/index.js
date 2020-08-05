@@ -1,18 +1,19 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-const PrivateRoute = ({ children, machine, ...rest }) => {
+const PrivateRoute = ({ Component, machine, ...rest }) => {
   const { user } = machine.context;
   return (
     <Route
       {...rest}
-      render={() =>
+      render={(props) =>
         user !== undefined ? (
-          children
+          <Component {...props} />
         ) : (
           <Redirect
             to={{
               pathname: "/sign-in",
+              state: { reason: "User is not active" },
             }}
           />
         )
