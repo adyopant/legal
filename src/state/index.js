@@ -10,6 +10,7 @@ export const appMachine = Machine({
   context: {
     user: undefined,
     error: undefined,
+    name: "Neville Longbottom",
   },
   states: {
     init: {},
